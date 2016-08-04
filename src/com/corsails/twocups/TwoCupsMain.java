@@ -71,12 +71,9 @@ public class TwoCupsMain {
 		// Get the difference between the larger cup and the smaller cup and add to the total measurement. (or just measure with one of the cups if they are the same size)
 		// Looking at this more abstractly, to hit the targeted measurement, you fill the larger cup until it's full, and then pour that cup into the smaller cup until you fill up the smaller cup.
 		// Whatever amount of water you have left over in the larger cup, you add to the total and attempt to hit the target measurement that way; you're guaranteed to either hit or exceed the target.
-		while (total < target) {
-			if (cup1 != cup2)
-				total += (Math.abs(cup1 - cup2));
-			else
-				total += cup1;
-		}
+		while (total < target)
+			total += (cup1 != cup2) ? Math.abs(cup1 - cup2) : cup1;
+			
 		return (total == target);
 	}
 }
