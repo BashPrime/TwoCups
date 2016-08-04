@@ -3,7 +3,7 @@ package com.corsails.twocups;
 import java.util.Scanner;
 
 public class TwoCupsMain {
-	public static void main(String[] args) throws NumberFormatException {
+	public static void main(String[] args) {
 		// Set up CLI-style input
 		boolean exitFlag = false;
 		Scanner scanner = new Scanner(System.in);
@@ -52,6 +52,7 @@ public class TwoCupsMain {
 			if (!exitFlag)
 				System.out.print("> ");
 		}
+		scanner.close();
 		
 	}
 	
