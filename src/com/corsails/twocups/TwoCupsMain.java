@@ -1,5 +1,7 @@
 package com.corsails.twocups;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class TwoCupsMain {
@@ -17,7 +19,6 @@ public class TwoCupsMain {
 				// Check for exit condition
 				if (input.equals("exit")) {
 					exitFlag = true;
-					System.out.println("Exiting...");
 				}
 				
 				// Validate the input stream and begin processing it
@@ -53,6 +54,7 @@ public class TwoCupsMain {
 				System.out.print("> ");
 		}
 		scanner.close();
+		System.out.println("Exiting...");
 		
 	}
 	
@@ -70,15 +72,60 @@ public class TwoCupsMain {
 		if ((target >= cup1 && target % cup1 == 0) || (target >= cup2 && target % cup2 == 0))
 			return true;
 		
-		// Instance variable
-		int total = 0;
+		if (cup1 == cup2)
+			return false;
 		
-		// Get the difference between the larger cup and the smaller cup and add to the total measurement. (or just measure with one of the cups if they are the same size)
-		// Looking at this more abstractly, to hit the targeted measurement, you fill the larger cup until it's full, and then pour that cup into the smaller cup until you fill up the smaller cup.
-		// Whatever amount of water you have left over in the larger cup, you add to the total and attempt to hit the target measurement that way; you're guaranteed to either hit or exceed the target.
-		while (total < target)
-			total += (cup1 != cup2) ? Math.abs(cup1 - cup2) : cup1;
+		// Instance variables
+		HashMap<String, Cup> cups = new HashMap<String, Cup>();
+		cups.put("larger", new Cup(0, (cup1 > cup2) ? cup1 : cup2));
+		cups.put("smaller", new Cup(0, (cup1 < cup2) ? cup1 : cup2));
+		int counter = 0;
+		boolean targetFlag = false;
+		
+		while (!targetFlag && counter < 500) {
+			// Fill large cup with water
+			cups.get("larger").fill();
 			
-		return (total == target);
+			if (measureCapacities(cups, target)) {
+				targetFlag = true;
+				break;
+			}
+				
+			// Transfer large cup to small cup
+			cups.get("smaller").transferFromOtherCup(cups.get("larger"));
+
+			if (measureCapacities(cups, target)) {
+				targetFlag = true;
+				break;
+			}
+			
+			// Empty small cup
+			cups.get("smaller").empty();
+			
+			if (measureCapacities(cups, target)) {
+				targetFlag = true;
+				break;
+			}
+			
+			// Transfer large cup to small cup
+			cups.get("smaller").transferFromOtherCup(cups.get("larger"));
+			
+			if (measureCapacities(cups, target)) {
+				targetFlag = true;
+				break;
+			}			
+			
+			counter++;
+		}
+		
+		if (targetFlag)
+			return true;
+		return false;
+	}
+	
+	public static boolean measureCapacities(HashMap<String, Cup> cups, int target) {
+		if (cups.get("larger").getAmount() == target || cups.get("smaller").getAmount() == target)
+			return true;
+		return false;
 	}
 }
