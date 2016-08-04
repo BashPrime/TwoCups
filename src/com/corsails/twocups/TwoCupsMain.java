@@ -65,6 +65,10 @@ public class TwoCupsMain {
 	}
 	
 	public static boolean measureWater(int cup1, int cup2, int target) {
+		// Check if we can hit the target with just one cup
+		if ((target >= cup1 && target % cup1 == 0) || (target >= cup2 && target % cup2 == 0))
+			return true;
+		
 		// Instance variable
 		int total = 0;
 		
