@@ -65,19 +65,17 @@ public class TwoCupsMain {
 	}
 	
 	public static boolean measureWater(int cup1, int cup2, int target) {
-		// If the cups are the same size, it's impossible to hit the target
-		if (cup1 == cup2)
-			return false;
-		
-		int smallerCup = (cup1 < cup2) ? cup1 : cup2;
-		int largerCup = (cup1 > cup2) ? cup1 : cup2;
+		// Instance variable
 		int total = 0;
 		
 		// Get the difference between the larger cup and the smaller cup and add to the total measurement.
 		// Looking at this more abstractly, to hit the targeted measurement, you fill the larger cup until it's full, and then pour that cup into the smaller cup until you fill up the smaller cup.
 		// Whatever amount of water you have left over in the larger cup, you add to the total and attempt to hit the target measurement that way; you're guaranteed to either hit or exceed the target.
 		while (total < target) {
-			total += largerCup - smallerCup;
+			if (cup1 != cup2)
+				total += (Math.abs(cup1 - cup2));
+			else
+				total += cup1;
 		}
 		return (total == target);
 	}
